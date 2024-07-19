@@ -21,4 +21,20 @@ require "rails_helper"
 
 RSpec.describe Article, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
+
+  context "タイトルが設定されていないとき" do
+    article = Article.new(body: "こんにちは")
+
+    it "記事を作成できない" do
+      expect(article.save).to be_falsey
+    end
+  end
+
+  context "タイトルが100文字を超えるとき" do
+    let(:article) { Article.new(title: "タイトルが入ります。" * 10, body: "こんにちは") }
+
+    it "記事を作成できない" do
+      expect(article.save).to be_falsey
+    end
+  end
 end

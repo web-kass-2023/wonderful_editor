@@ -23,4 +23,11 @@ require "rails_helper"
 
 RSpec.describe Comment, type: :model do
   pending "add some examples to (or delete) #{__FILE__}"
+
+  context "コメントが100文字を超える時" do
+    let(:comment) { Comment.new(body: "コメントが入ります。" * 10) }
+    it "コメントを投稿できない" do
+      expect(comment.save).to be_falsey
+    end
+  end
 end
