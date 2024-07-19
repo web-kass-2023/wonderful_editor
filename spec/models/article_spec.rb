@@ -29,9 +29,9 @@ RSpec.describe Article, type: :model do
       expect(article.save).to be_falsey
     end
   end
+
   context "タイトルが100文字を超えるとき" do
-    article = Article.new(title: "タイトルが入ります。タイトルが入ります。タイトルが入ります。タイトルが入ります。タイトルが入ります。タイトルが入ります。タイトルが入ります。タイトルが入ります。タイトルが入ります。タイトルが入ります。タイトルが入ります。タイトルが入ります。タイトルが入ります。
-" body: "こんにちは")
+    let(:article) { Article.new(title: "タイトルが入ります。" * 10, body: "こんにちは") }
 
     it "記事を作成できない" do
       expect(article.save).to be_falsey
