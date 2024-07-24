@@ -37,4 +37,13 @@ RSpec.describe Article, type: :model do
       expect(article.save).to be_falsey
     end
   end
+
+  context "ログイン済みのユーザーでない場合" do
+    @user =
+      let(:article) { Article.new(title: "タイトルが入ります。" * 10, body: "こんにちは") }
+
+    it "記事を作成できない" do
+      expect(article.new).to be_falsey
+    end
+  end
 end
