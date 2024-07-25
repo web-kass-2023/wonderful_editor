@@ -8,12 +8,21 @@ RSpec.describe "Api::V1::Auth::Sessions", type: :request do
       let(:user) { create(:user) }
       let(:params) { attributes_for(:user, email: user.email, password: user.password) }
 
-      it "ログインできる" do
-        subject
-        header = response.header
-        expect(header["access-token"]).to be_present
-        expect(header["client"]).to be_present
-        expect(headers["uid"]).to be_present
+      before { subject }
+
+      it "レスポンスのヘッダーに access-token が含まれている" do
+        expect(response.header["access-token"]).to be_present
+      end
+
+      it "レスポンスのヘッダーに client が含まれている" do
+        expect(response.header["client"]).to be_present
+      end
+
+      it "レスポンスのヘッダーに uid が含まれている" do
+        expect(response.header["uid"]).to be_present
+      end
+
+      it "HTTPステータスがOKである" do
         expect(response).to have_http_status(:ok)
       end
     end
@@ -21,15 +30,28 @@ RSpec.describe "Api::V1::Auth::Sessions", type: :request do
     context "emailが一致しないとき" do
       let(:user) { create(:user) }
       let(:params) { attributes_for(:user, email: "hoge", password: user.password) }
+      before { subject }
 
-      it "ログインできない" do
-        subject
-        res = JSON.parse(response.body)
-        header = response.header
+      let(:res) { JSON.parse(response.body) }
+      let(:header) { response.header }
+
+      it "エラーメッセージが含まれている" do
         expect(res["errors"]).to include "Invalid login credentials. Please try again."
+      end
+
+      it "レスポンスのヘッダーに access-token が含まれていない" do
         expect(header["access-token"]).to be_blank
+      end
+
+      it "レスポンスのヘッダーに client が含まれていない" do
         expect(header["client"]).to be_blank
-        expect(headers["uid"]).to be_blank
+      end
+
+      it "レスポンスのヘッダーに uid が含まれていない" do
+        expect(header["uid"]).to be_blank
+      end
+
+      it "HTTPステータスがUnauthorizedである" do
         expect(response).to have_http_status(:unauthorized)
       end
     end
@@ -38,7 +60,7 @@ RSpec.describe "Api::V1::Auth::Sessions", type: :request do
       let(:user) { create(:user) }
       let(:params) { attributes_for(:user, email: user.email, password: "hoge") }
 
-      it "ログインできない" do
+      it "ログインが認められない" do
         subject
         res = JSON.parse(response.body)
         header = response.header
