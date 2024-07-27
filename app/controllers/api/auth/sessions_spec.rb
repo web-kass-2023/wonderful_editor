@@ -29,11 +29,10 @@ RSpec.describe "Api::V1::Auth::Sessions", type: :request do
 
     context "emailが一致しないとき" do
       let(:user) { create(:user) }
-      let(:params) { attributes_for(:user, email: "hoge", password: user.password) }
-      before { subject }
-
       let(:res) { JSON.parse(response.body) }
       let(:header) { response.header }
+      let(:params) { attributes_for(:user, email: "hoge", password: user.password) }
+      before { subject }
 
       it "エラーメッセージが含まれている" do
         expect(res["errors"]).to include "Invalid login credentials. Please try again."
