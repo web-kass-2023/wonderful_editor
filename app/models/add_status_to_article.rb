@@ -1,0 +1,2 @@
+class AddStatusToArticle < ApplicationRecord
+end
