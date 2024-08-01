@@ -38,8 +38,11 @@ import Router from "../router/router";
 import marked from "marked";
 import hljs from "highlight.js";
 
+const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
 const headers = {
   headers: {
+    'X-CSRF-Token': csrfToken,
     access_token: localStorage.getItem("access-token"),
     client: localStorage.getItem("client"),
     uid: localStorage.getItem("uid")
@@ -129,7 +132,7 @@ export default {
 
     async fetchArticle(id) {
       await axios
-        .get(`/api/v1/articles/${id}`)
+        .get(`/api/v1/articles/drafts/${id}`, headers)
         .then(response => {
           this.id = response.data.id;
           this.title = response.data.title;
