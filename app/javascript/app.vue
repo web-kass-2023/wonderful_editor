@@ -1,8 +1,9 @@
 <template>
   <v-app id="app">
-    <dir class="header">
-      <Header/>
-    </dir>
+    <div class="header">
+      <Header>
+      </Header>
+    </div>
     <div class="layout">
       <router-view></router-view>
     </div>
